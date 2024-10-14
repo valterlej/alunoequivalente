@@ -2,12 +2,12 @@ import streamlit as st
 import pandas as pd
 import datetime
 import io
-from code.funcoes import filtrar_cursos
-from code.funcoes import filtrar_tipos_cursos
-from code.funcoes import obter_parametros_curso
-from code.funcoes import calcular_aluno_equivalente
-from code.funcoes import criar_ciclos_simulacao
-from code.funcoes import calcular_matriculas_totais_ano
+from funcoes import filtrar_cursos
+from funcoes import filtrar_tipos_cursos
+from funcoes import obter_parametros_curso
+from funcoes import calcular_aluno_equivalente
+from funcoes import criar_ciclos_simulacao
+from funcoes import calcular_matriculas_totais_ano
 
 dados = pd.read_excel('assets/relacao_cursos.xlsx', index_col=0)
 
