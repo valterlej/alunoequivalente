@@ -100,8 +100,6 @@ else: # múltiplos anos
                 st.write("Parâmetros dos cursos ofertados")
                 st.dataframe(dados_cursos_simulacao, use_container_width=True)
             except Exception as e:
-                import sys, traceback
-                traceback.print_exc(file=sys.stdout)
                 st.write("Formato inválido. Baixe e utilize o modelo disponbilizado.") 
 
     with tab_simulacao_calculos:    
@@ -116,6 +114,4 @@ else: # múltiplos anos
                 st.number_input("Matrículas totais do campus", value=sum([c["Matrículas totais"] for c in ciclos_sel]), disabled=True)
                 st.number_input("Orçamento do campus (matrículas) - R$", value=sum([c["R$"] for c in ciclos_sel]), disabled=True) 
             except Exception as e:
-                import sys, traceback
-                traceback.print_exc(file=sys.stdout)
                 st.write("Há algum parâmetro incorreto. Baixe e utilize o modelo de planilha disponbilizado.") 
