@@ -128,11 +128,15 @@ def calcular_aluno_equivalente(ano_ref, DIC, DTC, CHM, QTM1P, PC, B, E):
     #MT = MT * E
     return MT
 
-def criar_ciclos_simulacao(dados_simulacao, data_inicio, data_termino, anos):
+def criar_ciclos_simulacao(dados_simulacao, data_inicio, anos):
     ciclos = []
     for _, curso in dados_simulacao.iterrows():
         nome = curso['Nome']
         carga_horaria = curso['Carga horária']
+        ano_inicio_oferta = curso['Início da oferta']
+        ano_inicio_oferta = txt_to_date(data_inicio+"/"+str(ano_inicio_oferta), format="%d/%m/%Y")
+        ano_termino_oferta = curso['Término da oferta']
+        ano_termino_oferta = txt_to_date(data_inicio+"/"+str(ano_termino_oferta), format="%d/%m/%Y")
         peso = curso['Peso do curso']
         bonus = curso['Bônus']
         vagas = curso['Vagas ocupadas']
@@ -140,21 +144,22 @@ def criar_ciclos_simulacao(dados_simulacao, data_inicio, data_termino, anos):
         taxa_conclusao = curso['Taxa de conclusão']
         duracao = curso['Duração']
         for ano in range(anos[0],anos[1]+1):
-            inicio_ciclo = txt_to_date(data_inicio+"/"+str(ano), format="%d/%m/%Y")
-            fim_ciclo = adicionar_dias(inicio_ciclo, 30 * curso["Duração"])
-            ciclo = {}
-            ciclo["Nome"] = nome
-            ciclo["Carga horária"] = carga_horaria
-            ciclo["Duração"] = duracao
-            ciclo["Vagas ocupadas"] = vagas
-            ciclo["Peso do curso"] = peso
-            ciclo["Bonus"] = bonus
-            ciclo["Fator evasão anual"] = fator_evasao
-            ciclo["Taxa de conclusão"] = taxa_conclusao
-            ciclo["Ano"] = ano
-            ciclo["Data início"] = '{}/{}/{}'.format(inicio_ciclo.day, inicio_ciclo.month, inicio_ciclo.year)
-            ciclo["Data término"] = '{}/{}/{}'.format(fim_ciclo.day, fim_ciclo.month, fim_ciclo.year)
-            ciclos.append(ciclo)
+            if ano_inicio_oferta.year <= ano and ano_termino_oferta.year >= ano:
+                inicio_ciclo = txt_to_date(data_inicio+"/"+str(ano), format="%d/%m/%Y")
+                fim_ciclo = adicionar_dias(inicio_ciclo, 30 * (curso["Duração"]-1))
+                ciclo = {}
+                ciclo["Nome"] = nome
+                ciclo["Carga horária"] = carga_horaria
+                ciclo["Duração"] = duracao
+                ciclo["Vagas ocupadas"] = vagas
+                ciclo["Peso do curso"] = peso
+                ciclo["Bonus"] = bonus
+                ciclo["Fator evasão anual"] = fator_evasao
+                ciclo["Taxa de conclusão"] = taxa_conclusao
+                ciclo["Ano"] = ano
+                ciclo["Data início"] = '{}/{}/{}'.format(inicio_ciclo.day, inicio_ciclo.month, inicio_ciclo.year)
+                ciclo["Data término"] = '{}/{}/{}'.format(fim_ciclo.day, fim_ciclo.month, fim_ciclo.year)
+                ciclos.append(ciclo)
     return ciclos
 
 """
@@ -173,7 +178,7 @@ def simular_numero_matriculas_ativas_ciclos(matriculas_iniciais, ano_ciclo, ano_
         mat = mat * (1 - taxa_evasao)
 
     # diminuir os formados se existirem
-    if (ano_calculo - ano_ciclo) > duracao/12:
+    if (ano_calculo - ano_ciclo) > (duracao-1)/12:
         mat = mat - matriculas_iniciais * taxa_conclusao
 
     return int(max(mat, 0))
