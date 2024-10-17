@@ -22,7 +22,7 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
-st.sidebar.image("assets/irati-vertical.png",width=170)
+st.sidebar.image("code/assets/irati-vertical.png",width=170)
 st.sidebar.header("Calculadoras", divider="green")
 calculadora = st.sidebar.selectbox(
     "Selecione",
@@ -35,7 +35,7 @@ st.sidebar.header("Desenvolvedores", divider="green")
 st.sidebar.link_button("Valter Estevam","mailto:valter.junior@ifpr.edu.br", use_container_width=True)
 st.sidebar.link_button("João Cruz","mailto:joão.cruz@ifpr.edu.br", use_container_width=True)
 
-dados = pd.read_excel('assets/relacao_cursos.xlsx', index_col=0)
+dados = pd.read_excel('code/assets/relacao_cursos.xlsx', index_col=0)
 
 if calculadora == "Simples":
     st.header("Calculadora Simples", divider="green")
@@ -79,7 +79,7 @@ else: # múltiplos anos
         ANOS_SIMULACAO = st.slider("Selecione os anos para simular ciclos", 2018, 2045, (2018, 2030))
         
         buffer = io.BytesIO()
-        df1 = pd.read_excel("assets/cursos_irati_modelo.xlsx")
+        df1 = pd.read_excel("code/assets/cursos_irati_modelo.xlsx")
         with pd.ExcelWriter(buffer, engine='xlsxwriter') as writer:
                 df1.to_excel(writer, sheet_name='Dados',index=False)
                 writer.close()
